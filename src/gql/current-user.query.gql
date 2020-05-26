@@ -1,0 +1,11 @@
+query getCurrentUser {
+  getCurrentUser {
+    user {
+      id
+      fullName
+      idNumber
+      phone
+      email
+    }
+  }
+}

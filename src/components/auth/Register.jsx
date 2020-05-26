@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useMutation } from '@apollo/react-hooks';
 import {
   Grid,
   Form,
@@ -7,9 +8,19 @@ import {
   Button,
   Header,
   Message,
-} from 'semantic-ui-react' 
+} from 'semantic-ui-react'
+import { signUpMutation } from '../../gql'
 
 const Register = () => {
+
+  const history = useHistory()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      history.push('/')
+    }
+  }, [history])
 
   const [form, setState] = useState({
     fullName: '',
@@ -22,25 +33,27 @@ const Register = () => {
     loading: false
   })
 
+  const [createUser] = useMutation(signUpMutation);
+
   const handleChange = event => {
     setState({...form, [event.target.name]: event.target.value})
   }
 
   const isFormEmpty = ({ fullName, phone, idNumber, email, password, confirmPassword }) => {
     if (!fullName.length || !phone.length || !idNumber.length || !email.length || !password.length || !confirmPassword.length) {
-      setState({...form, error: 'Field is empty'})
+      setState({...form, error: 'შეავსეთ ველები'})
       return false
     }
     if (idNumber.length !== 11) {
-      setState({...form, error: 'ID Number length should be 11'})
+      setState({...form, error: 'პირადი ნომერი არ არის ვალიდური'})
       return false
     }
-    if (phone.length > 13) {
-      setState({...form, error: 'Invalid phone number'})
+    if (phone.length > 13 || phone.length < 9) {
+      setState({...form, error: 'ტელეფონის ნომერი არ არის ვალიდური'})
       return false
     }
     if (isNaN(phone) || isNaN(idNumber)) {
-      setState({...form, error: 'Phone and ID number must be a number'})
+      setState({...form, error: 'შეიყვანეთ ვალიდური ტელეფონი და პირადი ნომერი'})
       return false
     }
     return true
@@ -48,11 +61,11 @@ const Register = () => {
 
   const isPasswordValid = ({ password, confirmPassword }) => {
     if (password.length < 6) {
-      setState({...form, error: 'Password is too short'})
+      setState({...form, error: 'პაროლი მოკლეა'})
       return false
     }
     if (password !== confirmPassword) {
-      setState({...form, error: 'Passwords do not match'})
+      setState({...form, error: 'პაროლები არ ემთხვევა'})
       return false
     }
     return true
@@ -64,10 +77,30 @@ const Register = () => {
     return true
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault()
     if (isFormValid()) {
-      setState({...form, error: '', loading: true})
+      try {
+        setState({...form, error: '', loading: true})
+        const { data } = await createUser({
+          variables: {
+            record: {
+              fullName: form.fullName,
+              email: form.email,
+              phone: form.phone,
+              idNumber: form.idNumber,
+              password: form.password,
+            }
+          }
+        })
+        localStorage.setItem('token', data.signUp.token)
+        localStorage.setItem('currentUser', data.signUp.user)
+        setState({...form, loading: false})
+        history.push('/');
+      } catch (error) {
+        console.log(error)
+        setState({...form, error: 'მომხმარებელი უკვე რეგისტრირებულია', loading: false})
+      }
     }
   }
 
@@ -77,7 +110,7 @@ const Register = () => {
     <Grid textAlign="center" verticalAlign="middle" className="app">
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h1" icon color="grey" textAlign="center">
-          რეგისტრაცია
+          შემოგვიერთდი
         </Header>
         <Form onSubmit={handleSubmit} size="large">
           <Segment stacked>
@@ -147,7 +180,7 @@ const Register = () => {
               value={form.confirmPassword}
               type="password"
             />
-            <Button disabled={form.loading} className={form.loading ? 'loading' : ''} color="grey" fluid size="large">შენახვა</Button>
+            <Button disabled={form.loading} className={form.loading ? 'loading' : ''} color="grey" fluid size="large">რეგისტრაცია</Button>
           </Segment>
         </Form>
         {form.error && (

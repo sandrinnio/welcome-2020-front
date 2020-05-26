@@ -1,0 +1,12 @@
+mutation signIn($email: String!, $password: String!) {
+  signIn(record: { email: $email, password: $password }) {
+    token
+    user {
+      id
+      fullName
+      idNumber
+      phone
+      email
+    }
+  }
+}
