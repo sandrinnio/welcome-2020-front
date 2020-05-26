@@ -1,0 +1,12 @@
+mutation signUp($record: CreateUserDTO!) {
+  signUp(record: $record) {
+    token
+    user {
+      id
+      fullName
+      idNumber
+      phone
+      email
+    }
+  }
+}
