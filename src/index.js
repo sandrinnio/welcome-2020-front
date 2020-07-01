@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { client } from './service/apollo'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
+import Confirm from './components/confirm/Confirm'
 import App from './App';
 import 'semantic-ui-css/semantic.min.css'
 
@@ -17,6 +18,7 @@ ReactDOM.render(
             <Route exact path="/" component={App} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route path="/confirm" component={Confirm} />
           </Switch>
         </Fragment>
       </Router>

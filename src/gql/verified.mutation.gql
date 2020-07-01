@@ -1,5 +1,5 @@
-query getCurrentUser {
-  getCurrentUser {
+mutation verify($record: VerifyDTO!) {
+  verify(record: $record) {
     id
     fullName
     idNumber

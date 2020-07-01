@@ -7,6 +7,7 @@ mutation signIn($email: String!, $password: String!) {
       idNumber
       phone
       email
+      verified
     }
   }
 }

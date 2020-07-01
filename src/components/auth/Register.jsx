@@ -94,7 +94,6 @@ const Register = () => {
           }
         })
         localStorage.setItem('token', data.signUp.token)
-        localStorage.setItem('currentUser', data.signUp.user)
         setState({...form, loading: false})
         history.push('/');
       } catch (error) {

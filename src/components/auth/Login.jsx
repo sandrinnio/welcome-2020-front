@@ -49,7 +49,6 @@ const Login = () => {
           }
         })
         localStorage.setItem('token', data.signIn.token)
-        localStorage.setItem('currentUser', data.signIn.user)
         setState({...form, loading: false})
         history.push('/');
       } catch (error) {
