@@ -36,24 +36,24 @@ const Register = () => {
   const [createUser] = useMutation(signUpMutation);
 
   const handleChange = event => {
-    setState({...form, [event.target.name]: event.target.value})
+    setState({ ...form, [event.target.name]: event.target.value })
   }
 
   const isFormEmpty = ({ fullName, phone, idNumber, email, password, confirmPassword }) => {
     if (!fullName.length || !phone.length || !idNumber.length || !email.length || !password.length || !confirmPassword.length) {
-      setState({...form, error: 'შეავსეთ ველები'})
+      setState({ ...form, error: 'შეავსეთ ველები' })
       return false
     }
     if (idNumber.length !== 11) {
-      setState({...form, error: 'პირადი ნომერი არ არის ვალიდური'})
+      setState({ ...form, error: 'პირადი ნომერი არ არის ვალიდური' })
       return false
     }
     if (phone.length > 13 || phone.length < 9) {
-      setState({...form, error: 'ტელეფონის ნომერი არ არის ვალიდური'})
+      setState({ ...form, error: 'ტელეფონის ნომერი არ არის ვალიდური' })
       return false
     }
     if (isNaN(phone) || isNaN(idNumber)) {
-      setState({...form, error: 'შეიყვანეთ ვალიდური ტელეფონი და პირადი ნომერი'})
+      setState({ ...form, error: 'შეიყვანეთ ვალიდური ტელეფონი და პირადი ნომერი' })
       return false
     }
     return true
@@ -61,11 +61,11 @@ const Register = () => {
 
   const isPasswordValid = ({ password, confirmPassword }) => {
     if (password.length < 6) {
-      setState({...form, error: 'პაროლი მოკლეა'})
+      setState({ ...form, error: 'პაროლი მოკლეა' })
       return false
     }
     if (password !== confirmPassword) {
-      setState({...form, error: 'პაროლები არ ემთხვევა'})
+      setState({ ...form, error: 'პაროლები არ ემთხვევა' })
       return false
     }
     return true
@@ -81,7 +81,7 @@ const Register = () => {
     event.preventDefault()
     if (isFormValid()) {
       try {
-        setState({...form, error: '', loading: true})
+        setState({ ...form, error: '', loading: true })
         const { data } = await createUser({
           variables: {
             record: {
@@ -94,11 +94,11 @@ const Register = () => {
           }
         })
         localStorage.setItem('token', data.signUp.token)
-        setState({...form, loading: false})
+        setState({ ...form, loading: false })
         history.push('/');
       } catch (error) {
         console.log(error)
-        setState({...form, error: 'მომხმარებელი უკვე რეგისტრირებულია', loading: false})
+        setState({ ...form, error: 'მომხმარებელი უკვე რეგისტრირებულია', loading: false })
       }
     }
   }

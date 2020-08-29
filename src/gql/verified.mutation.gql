@@ -6,5 +6,7 @@ mutation verify($record: VerifyDTO!) {
     phone
     email
     verified
+    paid
+    ticket
   }
 }

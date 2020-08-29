@@ -30,7 +30,11 @@ function App() {
     <div className="App">
       <button onClick={logout}>Log Out</button>
       {(user && user.verified) ? <p>Verified</p> : <p>You aren't verified</p>}
-
+      {user && user.paid && user.ticket && (
+        <div>
+          <img src={user.ticket} alt="ticket" />
+        </div>
+      )}
     </div>
   );
 }

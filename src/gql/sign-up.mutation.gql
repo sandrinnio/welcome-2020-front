@@ -8,6 +8,8 @@ mutation signUp($record: CreateUserDTO!) {
       phone
       email
       verified
+      paid
+      ticket
     }
   }
 }
